@@ -24,6 +24,7 @@ export default {
   name: 'Option',
   data() {
     return {
+      forbidden: ['Muntasir', 'Ibrahim'],
       newTodo: '',
       todos: [
         {
@@ -61,6 +62,15 @@ export default {
   computed: {
     todoCount() {
       return this.todos.length;
+    }
+  },
+  watch: {
+    newTodo(newValue) {
+      console.log(newValue);
+      if (this.forbidden.includes(this.newTodo)) {
+        this.newTodo = '';
+        alert('Saying ' + newValue + ' is not allowed!!');
+      }
     }
   }
 };
