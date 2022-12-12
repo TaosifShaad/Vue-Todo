@@ -8,9 +8,12 @@
     <div>
       <ul>
         <li v-for="(todo, key) in todos" :key="todo.id">
-          <span> {{ todo.name }} </span>
+          <input type="checkbox" v-model="todo.bol">
+          <span :class="{done: todo.bol}"> {{ todo.name }} </span>
           <button @click="deleteTodo(key)">X</button>
         </li>
+        <button @click="toggleButton" v-if="button">Hide Completed Tasks</button>
+        <button @click="toggleButton" v-else> Show All Tasks</button>
       </ul>
     </div>
   </div>
@@ -22,24 +25,29 @@
   export default {
     setup() {
       const state = reactive({
+        button: true,
         newTodo: '',
         forbidden: ['Montasir', 'Ibrahim'],
         todos: [
         {
           id: 1,
-          name: 'one'
+          name: 'one',
+          bol: 'false'
         },
         {
           id: 2,
-          name: 'two'
+          name: 'two',
+          bol: false
         },
         {
           id: 3,
-          name: 'three'
+          name: 'three',
+          bol: false
         },
         {
           id: 4,
-          name: 'four'
+          name: 'four',
+          bol: false
         }
       ]
       });
@@ -57,6 +65,10 @@
         state.todos.splice(key, 1);
       }
 
+      function toggleButton() {
+        state.button = !state.button;
+      }
+
       let todoCount = computed(() => {
         return state.todos.length;
       });
@@ -72,6 +84,7 @@
         ...toRefs(state),
         addTodo,
         deleteTodo,
+        toggleButton,
         todoCount
       }
     }
@@ -101,5 +114,8 @@
   }
   h3 {
     margin-top: 60px;
+  }
+  .done {
+    text-decoration: line-through;
   }
 </style>
