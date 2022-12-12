@@ -7,7 +7,7 @@
     </div>
     <div>
       <ul>
-        <li v-for="(todo, key) in todos" :key="todo.id">
+        <li v-for="(todo, key) in filteredTodos" :key="todo.id">
           <input type="checkbox" v-model="todo.bol">
           <span :class="{done: todo.bol}"> {{ todo.name }} </span>
           <button @click="deleteTodo(key)">X</button>
@@ -32,7 +32,7 @@
         {
           id: 1,
           name: 'one',
-          bol: 'false'
+          bol: false
         },
         {
           id: 2,
@@ -73,6 +73,10 @@
         return state.todos.length;
       });
 
+      let filteredTodos = computed(() => {
+        return !state.button? state.todos.filter((todo) => !todo.bol) : state.todos;
+      });
+
       watch(state, newValue => {
         if (state.forbidden.includes(newValue.newTodo)) {
           alert("Saying " + newValue.newTodo + " is not allowed!");
@@ -85,7 +89,8 @@
         addTodo,
         deleteTodo,
         toggleButton,
-        todoCount
+        todoCount,
+        filteredTodos
       }
     }
   }
